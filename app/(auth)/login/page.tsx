@@ -1,9 +1,12 @@
+import AuthForm from '@/components/AuthForm'
 import React from 'react'
 
-const LogIn = () => {
+const Login = () => {
   return (
-    <div>LogIn</div>
+    <section className='flex-center size-full max-sm:px-6'>
+      <AuthForm type='login'/>
+    </section>
   )
 }
 
-export default LogIn
+export default Login
