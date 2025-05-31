@@ -23,6 +23,7 @@ import { authFormSchema } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { getLoggedInUser, signIn, signUp } from "@/lib/actions/user.actions";
+import PlaidLink from "./PlaidLink";
 
 
 
@@ -39,8 +40,16 @@ const AuthForm = ({ type }: { type: string }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: '',
+        email: "",
+        password: "",
+        firstName: "",
+        lastName: "",
+        address1: "",
+        city: "",
+        state: "",
+        postalCode: "",
+        dateOfBirth: "",
+        ssn: "",
     },
   });
 
@@ -51,8 +60,22 @@ const AuthForm = ({ type }: { type: string }) => {
     try {
       //sign up with appwrite & create plaid token
 
+
       if (type === 'signUp') {
-        const newUser = await signUp(data);
+
+        const userData = {
+          firstName: data.firstName!,
+          lastName: data.lastName!,
+          address1: data.address1!,
+          city: data.city!,
+          state: data.state!,
+          postalCode: data.postalCode!,
+          dateOfBirth: data.dateOfBirth!,
+          ssn: data.ssn!,
+          email: data.email,
+          password: data.password,
+        }
+        const newUser = await signUp(userData);
 
         setUser(newUser);
       }
@@ -98,8 +121,8 @@ const AuthForm = ({ type }: { type: string }) => {
         </div>
       </header>
       {user ? (
-        <div className="flex flex-col gap-4">{/*Plaid account */}</div>
-      ) : (
+        <div className="flex flex-col gap-4"><PlaidLink user={user} variant='primary' /></div>
+       ) : (
         <>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -137,14 +160,14 @@ const AuthForm = ({ type }: { type: string }) => {
                       control={form.control}
                       name="state"
                       label="State"
-                      placeholder="Example: Abuja"
+                      placeholder="Example: NY"
                     />
 
                     <CustomInput
                       control={form.control}
                       name="postalCode"
                       label="Postal Code"
-                      placeholder="Example: 900109"
+                      placeholder="Example: 90210"
                     />
                   </div>
                   <div className="flex gap-4">
@@ -202,7 +225,7 @@ const AuthForm = ({ type }: { type: string }) => {
             </Link>
           </footer>
         </>
-      )}
+    )}
     </section>
   );
 };
