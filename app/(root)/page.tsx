@@ -33,7 +33,6 @@ const Home = async ({ searchParams }: Props) => {
 
   const account = await getAccount({ appwriteItemId })
 
-  console.log({accountsData, account})
 
 
   return (
